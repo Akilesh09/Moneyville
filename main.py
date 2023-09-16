@@ -9,7 +9,9 @@ pygame.display.set_caption("Moneyville")
 
 health = 100
 money = 1000
-investmentMoney = 0
+StockInvestmentMoney = 0
+BondInvestmentMoney = 0
+CDInvestmentMoney = 0
 social = 50
 dailytime = 0
 
@@ -171,6 +173,9 @@ def choicemenu(prompt,choices,consequence):
         
 def gym():
     choicemenu("What workout do you want to hit", ["Weightlifting Session (1 hour)", "Cardio (30 min)", "Exit"],[causeConsequence(changeHealth,1),causeConsequence(changeHealth,.5),causeConsequence(choicemenu,[],)])
+
+def bank():
+    choicemenu("What type of fund would you like to invest in?", ["Stocks - Medium risk with average ROI of 10% (1 hour)", "Bonds - Low risk with average ROI of 4%(1 hour)", "Certified Deposit(CD) - Very low risk with average ROI of 2%(1 hour)","EXIT"])
 
 
 #consequences
