@@ -23,8 +23,10 @@ MAIN_CHARACTER = pygame.transform.scale(pygame.image.load(
     os.path.join('Assets', 'main_character.jpg')), (CHAR_WIDTH, CHAR_HEIGHT))
 BACKGROUND_MAP = pygame.transform.scale(pygame.image.load(
     os.path.join('Assets', 'map1.jpg')), (WIDTH, HEIGHT))
+PICK_SOMETHING_SCREEN = pygame.transform.scale(pygame.image.load(
+    os.path.join('Assets', 'questionscreen.jpg')), (WIDTH, HEIGHT))
 CHARACTER_X, CHARACTER_Y = 0, 0
-
+counter = 0
 
 loadingscreenset = True  # Starts as false
 onmap = True  # Starts as false
@@ -134,3 +136,43 @@ def main():
 
 if __name__ == "__main__":
     main()
+
+def choicemenu(prompt,choices,consequence):
+    f = True
+    WIN.blit(BACKGROUND_MAP, (0, 0))
+    pygame.display.update()
+    #add line that displays the prompt on the screen
+    #add line that dispslays the prompt on the 
+    if len(choices) == 0:
+        return 0
+    while(f):
+        keys = pygame.key.get_pressed()
+        if keys[pygame.K_1]:
+            f = False
+            return 1
+        if keys[pygame.K_2]:
+            return 2
+        if keys[pygame.K_3] and len(choices) > 2:
+            return 3
+        if keys[pygame.K_4] and len(choices) == 4:
+            return 4
+        
+def gym():
+    choicemenu("What workout do you want to hit", ["Weightlifting Session (1 hour), "])
+
+
+#consequences
+
+def causeConsequence():
+    if 
+
+def reduceTime(value): #value in hours
+    pass
+def newDay(): #sets time back to normal 
+    pass 
+def changeMoney(value):
+    pass
+def multMoney(factor): #mult factor 
+    pass
+def changeFitness(value): #adds/decreases to fitness
+    pass
