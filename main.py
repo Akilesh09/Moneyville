@@ -20,9 +20,9 @@ onmap = True # Starts as false
 
 def draw():
     draw_background()
-    if onmap:
-        draw_character()
-    else: #draw options into four box screen
+    #if onmap:
+        #draw_character()
+    #else: #draw options into four box screen
 
 def draw_character(x,y):
     WIN.fill(BACKGROUND_COLOR)
@@ -33,11 +33,11 @@ def draw_background(): #draws the background, if we're on the map it draws the m
     if onmap:
         WIN.fill(BACKGROUND_COLOR)
         WIN.blit(BACKGROUND_MAP,(0,0))
-    else: #draw a box with four descriptions of options
+    #else: #draw a box with four descriptions of options
 
     pygame.display.update()
 
-def islegalarea(): 
+#def islegalarea(): 
 
 
 
