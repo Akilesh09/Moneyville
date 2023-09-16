@@ -6,7 +6,7 @@ WIN = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption("Moneyville")
 
 BACKGROUND_COLOR = (255, 255, 255)
-FPS = 200
+FPS = 60
 
 CHAR_HEIGHT = 100
 CHAR_WIDTH = 70
@@ -30,7 +30,6 @@ def draw(x,y):
 
 
 def draw_character(x, y):
-    WIN.fill(BACKGROUND_COLOR)
     WIN.blit(MAIN_CHARACTER, (x, y))
     pygame.display.update()
 
