@@ -25,7 +25,7 @@ def draw_background():
     WIN.fill(BACKGROUND_COLOR)
     WIN.blit(BACKGROUND_MAP,(0,0))
     pygame.display.update()
-
+f
 def main():
     clock = pygame.time.Clock()
     run = True
