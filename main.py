@@ -12,11 +12,18 @@ CHAR_HEIGHT = 100
 CHAR_WIDTH = 70
 MAIN_CHARACTER = pygame.transform.scale(pygame.image.load(os.path.join('Assets','main_character.jpg')),(CHAR_HEIGHT,CHAR_WIDTH))
 BACKGROUND_MAP = pygame.transform.scale(pygame.image.load(os.path.join('Assets','map1.jpg')),(WIDTH,HEIGHT))
+CHARACTER_X, CHARACTER_Y = 0,0
+
 
 loadingscreenset = True#Stars as false
 onmap = True # Starts as false
 
-def draw_character():
+def draw():
+    draw_background()
+    if onmap:
+        draw_character
+
+def draw_character(x,yf):
     WIN.fill(BACKGROUND_COLOR)
     WIN.blit(MAIN_CHARACTER,(500,300))
     pygame.display.update()
