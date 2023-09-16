@@ -40,7 +40,6 @@ def draw_background():  # draws the background, if we're on the map it draws the
         WIN.blit(BACKGROUND_MAP, (0, 0))
     # else: #draw a box with four descriptions of options
 
-    pygame.display.update()
 
 def islegalarea(x,y):
    
@@ -73,12 +72,21 @@ def islegalarea(x,y):
 def main():
     clock = pygame.time.Clock()
     run = True
+    Coordinates = pygame.Rect(300,300,CHAR_WIDTH,CHAR_HEIGHT)
     while run:
         clock.tick(FPS)
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 run = False
-        Coordinates = pygame.Rect(300,300,CHAR_WIDTH,CHAR_HEIGHT)
+        keys = pygame.key.get_pressed()
+        if keys[pygame.K_LEFT]:
+            Coordinates.x -= 5
+        if keys[pygame.K_RIGHT]:
+            Coordinates.x += 5
+        if keys[pygame.K_UP]:
+            Coordinates.y -= 5
+        if keys[pygame.K_DOWN]:
+            Coordinates.y += 5
         draw(Coordinates.x,Coordinates.y)
     pygame.quit()
 
