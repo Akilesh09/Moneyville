@@ -1,5 +1,7 @@
 import pygame
 import os
+import random
+
 
 WIDTH, HEIGHT = 640, 512
 WIN = pygame.display.set_mode((WIDTH, HEIGHT))
@@ -7,7 +9,11 @@ pygame.display.set_caption("Moneyville")
 
 health = 100
 money = 1000
+investmentMoney = 0
 social = 50
+dailytime = 0
+
+remaininghours = 0  
 
 # Define stat names
 health_name = "Health"
@@ -30,6 +36,9 @@ counter = 0
 
 loadingscreenset = True  # Starts as false
 onmap = True  # Starts as false
+
+
+
 
 def draw_stats():
     # Stat names and numerical values
@@ -148,31 +157,51 @@ def choicemenu(prompt,choices,consequence):
     while(f):
         keys = pygame.key.get_pressed()
         if keys[pygame.K_1]:
-            f = False
-            return 1
+            consequence[1]
+            return
         if keys[pygame.K_2]:
-            return 2
+            consequence[2]
+            return
         if keys[pygame.K_3] and len(choices) > 2:
-            return 3
+            consequence[3]
+            return
         if keys[pygame.K_4] and len(choices) == 4:
-            return 4
+            consequence[4]
+            return
         
 def gym():
-    choicemenu("What workout do you want to hit", ["Weightlifting Session (1 hour), "])
+    choicemenu("What workout do you want to hit", ["Weightlifting Session (1 hour)", "Cardio (30 min)", "Exit"],[causeConsequence(changeHealth,1),causeConsequence(changeHealth,.5),causeConsequence(choicemenu,[],)])
 
 
 #consequences
 
-def causeConsequence():
-    if 
+def causeConsequence(function, arg):
+    function(arg)
 
 def reduceTime(value): #value in hours
+    if value > remaininghours:
+        choicemenu("Sorry, not enough time left", [],)
+
     pass
 def newDay(): #sets time back to normal 
     pass 
 def changeMoney(value):
-    pass
-def multMoney(factor): #mult factor 
-    pass
-def changeFitness(value): #adds/decreases to fitness
-    pass
+    money = money + value
+    
+def multInvestment(factor): #mult factor 
+    investmentMoney = investmentMoney * factor
+
+def changeHealth(value): #adds/decreases to fitness
+    health += value
+    if health > 100:
+        health = 99
+    
+def gamble(value):
+    if money < 500:
+        choicemenu("Way too less money, sorry!",[],)
+    else:
+        random_number = random.random()
+        if random.random() > random_number * 1.07:
+            choicemenu("Congrats, your picks won!")
+
+            
