@@ -8,7 +8,9 @@ pygame.display.set_caption("Moneyville")
 BACKGROUND_COLOR = (255,255,255)
 FPS = 60
 
-MAIN_CHARACTER = pygame.transform.scale(pygame.image.load(os.path.join('Assets','main_character.jpg')),(100,70))
+CHAR_HEIGHT = 100
+CHAR_WIDTH = 70
+MAIN_CHARACTER = pygame.transform.scale(pygame.image.load(os.path.join('Assets','main_character.jpg')),(CHAR_HEIGHT,CHAR_WIDTH))
 
 def draw_window():
     WIN.fill(BACKGROUND_COLOR)
