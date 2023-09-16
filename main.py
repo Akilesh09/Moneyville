@@ -22,9 +22,13 @@ def draw_character():
     pygame.display.update()
 
 def draw_background():
-    WIN.fill(BACKGROUND_COLOR)
-    WIN.blit(BACKGROUND_MAP,(0,0))
+    if onmap:
+        WIN.fill(BACKGROUND_COLOR)
+        WIN.blit(BACKGROUND_MAP,(0,0))
     pygame.display.update()
+
+
+
 def main():
     clock = pygame.time.Clock()
     run = True
@@ -34,8 +38,7 @@ def main():
             if event.type == pygame.QUIT:
                 run = False
         #draw_window()
-        if onmap:
-            draw_background()
+        draw()
     pygame.quit()
 
 if __name__ == "__main__":
