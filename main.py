@@ -121,7 +121,7 @@ def main():
         keys = pygame.key.get_pressed()
         # print(Coordinates.x, Coordinates.y)
         if keys[pygame.K_LEFT] and Coordinates.x>-49:
-            Coordinates.x -= 2
+            Coordinates.x -= 3
         if keys[pygame.K_RIGHT] and Coordinates.x < 538:
             Coordinates.x += 3
         if keys[pygame.K_UP] and Coordinates.y > -3:
