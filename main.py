@@ -23,7 +23,8 @@ onmap = True  # Starts as false
 
 def draw(x,y):
     draw_background()
-    draw_character(x,y)
+    if onmap:
+        draw_character(x,y)
     #if onmap:
         #draw_character()
     #else: #draw options into four box screen
@@ -79,12 +80,12 @@ def main():
             if event.type == pygame.QUIT:
                 run = False
         keys = pygame.key.get_pressed()
-        print(Coordinates.x, Coordinates.y)
-        if keys[pygame.K_LEFT] and Coordinates.x>-57:
+        # print(Coordinates.x, Coordinates.y)
+        if keys[pygame.K_LEFT] and Coordinates.x>-49:
             Coordinates.x -= 2
         if keys[pygame.K_RIGHT] and Coordinates.x < 538:
             Coordinates.x += 3
-        if keys[pygame.K_UP] and Coordinates.y > -55:
+        if keys[pygame.K_UP] and Coordinates.y > -3:
             Coordinates.y -= 3
         if keys[pygame.K_DOWN] and Coordinates.y < 423:
             Coordinates.y += 3
