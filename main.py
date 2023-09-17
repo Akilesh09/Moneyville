@@ -198,6 +198,20 @@ def choicemenu(prompt,choices,consequence):
 def bank():
     choicemenu("What type of fund would you like to invest in?", ["Stocks - Medium risk with average ROI of 10% (1 hour)", "Bonds - Low risk with average ROI of 4%(1 hour)", "Certified Deposit(CD) - Very low risk with average ROI of 2%(1 hour)","EXIT"])
 
+def investIndexFunds(amount):
+    rate = (1+0.01*random.randint(4,8))
+    result = amount*rate
+    return result
+
+def investIPO(amount):
+    rate = (1+0.01*random.randint(-20,100))
+    result = amount*rate
+    return result
+
+def investStock(amount):
+    rate = (1+0.01*random.randint(-10,30))
+    result = amount*rate
+    return result
 
 #consequences
 
