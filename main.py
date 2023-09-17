@@ -155,6 +155,9 @@ def choicemenu(prompt,choices,consequence):
     #add line that displays the prompt on the screen
     #add line that dispslays the prompt on the 
     if len(choices) == 0:
+        keys = pygame.key.get_pressed()
+        if keys[pygame.K_SPACE]:
+            return
         return 0
     while(f):
         keys = pygame.key.get_pressed()
@@ -172,24 +175,35 @@ def choicemenu(prompt,choices,consequence):
             return
         
 def gym():
-    choicemenu("What workout do you want to hit", ["Weightlifting Session (1 hour)", "Cardio (30 min)", "Exit"],[causeConsequence(changeHealth,1),causeConsequence(changeHealth,.5),causeConsequence(choicemenu,[],)])
-
+    choicemenu("Choose a workout", ["30 minute run", "Weightlifting (1 hour)", "Return Back"], )
 def bank():
     choicemenu("What type of fund would you like to invest in?", ["Stocks - Medium risk with average ROI of 10% (1 hour)", "Bonds - Low risk with average ROI of 4%(1 hour)", "Certified Deposit(CD) - Very low risk with average ROI of 2%(1 hour)","EXIT"])
 
 
 #consequences
 
-def causeConsequence(function, arg):
-    function(arg)
+def thirty_minute_run():
+    if .5 > remaininghours:
+        choicemenu("Sorry, not enough time left", [],)
+    else:
+        reduceTime(30)
+        changeHealth(1)
+
+def weightlift():
+    if 1 > remaininghours:
+        choicemenu("Sorry, not enough time left", [],)
+    else:
+        reduceTime(.5)
+        changeHealth(1)
 
 def reduceTime(value): #value in hours
-    if value > remaininghours:
-        choicemenu("Sorry, not enough time left", [],)
+    remaininghours = remaininghours - value
 
-    pass
 def newDay(): #sets time back to normal 
-    pass 
+    time = dailytime
+    changeHealth(-1)
+    social = social -1 
+
 def changeMoney(value):
     money = money + value
     
