@@ -277,7 +277,7 @@ def investIPO(amount):
     return result
 
 def investStock(amount):
-    rate = (1+0.01*random.float(randint(-10,30)))
+    rate = (1+0.01*float(random.randint(-10,30)))
     result = amount*rate
     return result
 
