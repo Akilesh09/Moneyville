@@ -2,6 +2,7 @@ import pygame
 import os
 import random
 import textwrap
+import time
 
 
 
@@ -83,9 +84,20 @@ def draw(x,y):
     draw_stats()
     pygame.display.update()
 
-    #if onmap:
-        #draw_character()
-    #else: #draw options into four box screen
+def end_of_year():
+    global Year
+    global CashOnHand
+    global UnrealizedGains
+
+    # Add unrealized gains to cash on hand
+    CashOnHand += UnrealizedGains
+
+    # Reset unrealized gains for the next year
+    UnrealizedGains = 0
+
+    # Increment the year
+    Year += 1
+   
 
 
 def draw_character(x, y):
@@ -97,7 +109,7 @@ def spaceBar(x,y):
         bank()
     # (186,60) 258,159
     if 186 < x < 258 and 60 < y < 159:
-        pass
+        bank_quiz()
     # (69,87) (156,150
     if 69 < x < 156 and 87 < y < 150:
         pass
@@ -116,38 +128,7 @@ def draw_background():  # draws the background, if we're on the map it draws the
         WIN.blit(BACKGROUND_MAP, (0, 0))
     # else: #draw a box with four descriptions of options
 
-
-# def islegalarea(x,y):
-   
-#    if 40 < x < 500 and 200 + CHAR_HEIGHT < y < 220 + CHAR_HEIGHT :
-#         return True
-#    if 70 < x < 330 and 460+ CHAR_HEIGHT < y < 470+ CHAR_HEIGHT :
-#         return True
-#    if 40 < x < 590 and 310+ CHAR_HEIGHT  < y < 325+ CHAR_HEIGHT :
-#         return True
-#    if 465 < x < 485 and 325+ CHAR_HEIGHT  < y < 435+ CHAR_HEIGHT :
-#         return True
-#    if 420 < x < 535 and 135 + CHAR_HEIGHT < y < 150+ CHAR_HEIGHT :
-#         return True
-#    if 420 < x < 437 and 135+ CHAR_HEIGHT  < y < 320+ CHAR_HEIGHT :
-#         return True
-#    if 340 < x < 420 and 80+ CHAR_HEIGHT  < y < 95+ CHAR_HEIGHT :
-#         return True
-#    if 340 < x < 367 and 80 + CHAR_HEIGHT < y < 325+ CHAR_HEIGHT :
-#         return True
-#    if 295 < x < 308 and 200+ CHAR_HEIGHT  < y < 470+ CHAR_HEIGHT :
-#         return True
-#    if 227 < x < 242 and 200+ CHAR_HEIGHT  < y < 325+ CHAR_HEIGHT :
-#         return True
-#    if 138 < x < 151 and 200+ CHAR_HEIGHT  < y < 325+ CHAR_HEIGHT :
-#         return True
-#    if 40 < x < 55 and 200+ CHAR_HEIGHT  < y < 325+ CHAR_HEIGHT :
-#         return True
-
-
-   
-
-def choicemenu(prompt, choices, consequence):
+def choicemenu(prompt, choices):
     f = True
     choice_font = pygame.font.Font(None, int(36 * 0.7))  # Reduced font size by a factor of 0.7
 
@@ -192,7 +173,7 @@ def choicemenu(prompt, choices, consequence):
         if keys[pygame.K_SPACE]:
             return
         return 0
-    mouse_x ,mouse_y = -5,-5
+    mouse_x, mouse_y = -5, -5
     
     while(f):
       for event in pygame.event.get():
@@ -203,16 +184,15 @@ def choicemenu(prompt, choices, consequence):
             # print(mouse_x,mouse_y)
         if 20 < mouse_x < 320 and 180 < mouse_y <330:
             f = False
-            consequence[0]
+            return 0
         if 320 < mouse_x < 620 and 180 < mouse_y <330:
             f = False
-            consequence[1]
+            return 1
         if 20 < mouse_x < 320 and 330 < mouse_y <480 and len(choices) >= 3:
-            f = False
-            consequence[2]
+            return 2
         if 320 < mouse_x < 620 and 330 < mouse_y <480 and len(choices) == 4:
             f = False
-            consequence[3]
+            return 3
         # keys = pygame.key.get_pressed()
         # print(keys)
         # if keys[pygame.K_1]:
@@ -227,28 +207,77 @@ def choicemenu(prompt, choices, consequence):
         # elif keys[pygame.K_4] and len(choices) == 4:
         #     consequence[4]
         #     return
-        
-#def gym():
-    # choicemenu("Choose a workout", ["30 minute run", "Weightlifting (1 hour)", "Return Back"],[None,None,None,None] )
+
+
+def split_string_into_sets_of_12_words(input_string):
+    words = input_string.split()
+    return [" ".join(words[i:i+12]) for i in range(0, len(words), 12)]
+
+def display_text(text):
+    arr = split_string_into_sets_of_12_words(text)
+    for x in arr:
+        choicemenu(x,["","","",""])
+
+def bank_quiz():
+    onmap = False #necessary
+    display_text("Index Funds: An index fund is a type of mutual fund or exchange-traded fund (ETF) that aims to replicate the performance of a specific market index, such as the S&P 500 (Top 500 publicly traded companies). It is a passive investment strategy designed to match the returns of the index it tracks. It is typically a long term investment placed in retirement accounts, and offers moderately risky diversification options. Typical returns range from 3%-9% per year. ")
+    display_text("IPOs: An IPO is the process by which a privately held company becomes publicly traded by issuing shares of stock to the general public for the first time. It's often seen as a way for companies to raise capital to fuel growth. IPOs can be extremely risky, and require a detailed analysis of the companies performance pre-IPO to help determine future performance. Returns may range from -30%-100% per year. ")
+    display_text("Company Stock: Stocks, also known as equities or shares, represent ownership in a company. When you buy a stock, you become a shareholder and have a claim on the company's assets and earnings. You will need to pay close attention to market conditions, investor sentiment towards the company, and pay close attention to quarterly reports! Average returns are about -10-30% per year.")
+    display_text("U.S Treasury Bonds: These are issued by the U.S. Department of the Treasury and are considered one of the safest investments in the world. The rate of return is 1%")
+    display_text("Corporate Bonds:  These are issued by corporations to raise capital for various purposes, such as expansion or debt refinancing. Corporate bonds can vary in terms of credit quality, with investment-grade bonds being less risky than high-yield or junk bonds. The rate of return is 3%")
+    display_text("Certificate of Deposit: A Certificate of Deposit (CD) is a financial instrument offered by banks and credit unions that allows individuals to deposit a fixed amount of money for a specified period of time, typically ranging from a few months to several years. The rate of return is 1.5%")
+    display_text("Quiz Time!")
+    while not(choicemenu("1. What is the primary goal of an index fund?", ["a. To outperform the market", "b. To replicate the performance of a specific market index", "c. To invest in IPOs", "d. To generate consistent interest from bonds"]) == 1):
+        None
+    while not(choicemenu("2. What is the typical range of returns for index funds per year?", ["a. -30% to 100%", "b. 1% to 3%", "c. 3% to 9%", "d. -10% to 30%"]) == 2):
+        None
+    while not(choicemenu("3. What does IPO stand for, and what does it involve?", ["a. IPO stands for Index Performance Offering, and it involves tracking market indices.", "b. IPO stands for Individual Passive Ownership, and it involves investing in index funds.", "c. IPO stands for Initial Public Offering, and it involves a privately held company going public by issuing shares to the general public.", "d. IPO stands for Income Potential Opportunity, and it involves investing in corporate bonds."]) == 2):
+        None
+    while not(choicemenu("4. What should investors pay attention to when buying company stock?", ["a. The rate of return on U.S. Treasury Bonds", "b. Market conditions and investor sentiment towards the company", "c. The average returns of index funds", "d. The price of gold"]) == 1):
+        None
+    while not(choicemenu("5. Which type of bond is considered one of the safest investments in the world?", ["a. Corporate Bonds", "b. Certificate of Deposit", "c. U.S. Treasury Bonds", "d. Municipal Bonds"]) == 2):
+        None
+    while not(choicemenu("6. What is the primary purpose of issuing Corporate Bonds?", ["a. To raise capital for expansion", "b. To provide long-term returns", "c. To match the performance of market indices", "d. To invest in IPOs"]) == 0):
+        None
+    while not(choicemenu("7. What is the rate of return typically associated with Corporate Bonds?", ["a. 1%", "b. 3%", "c. 1.5%", "d. Varies widely"]) == 1):
+        None
+    while not(choicemenu("8. What is the rate of return typically associated with Certificate of Deposit (CD)?", ["a. 1%", "b. 3%", "c. 1.5%", "d. Varies widely"]) == 2):
+        None
+    
 
 
 
 def bank():
     onmap = False
-    choicemenu("What type of fund would you like to invest in?", ["Stocks - Medium risk with average ROI of 10% (1 hour)", "Bonds - Low risk with average ROI of 4%(1 hour)", "Certified Deposit(CD) - Very low risk with average ROI of 2%(1 hour)","EXIT"],[None,None , None, None])
+    global UnrealizedGains
+    global CashOnHand
+    choice = choicemenu("What type of fund would you like to invest in?", ["Stocks(-10-30% ROI)", "IPO(-20-100% ROI)", "Index Fund(4-8% ROI)","EXIT"])
+    if not choice == 3:
+        multiplier = [.1,.25,.5,1]
+        percentchoice = choicemenu("What percent of your earnings would you like to invest",["10%", "25%", "50%", "100%"])
+        if choice == 0:
+            UnrealizedGains = UnrealizedGains + investStock(multiplier[percentchoice] * CashOnHand)
+            CashOnHand = CashOnHand - multiplier[percentchoice] * CashOnHand
+        if choice == 1:
+            UnrealizedGains = UnrealizedGains + investIPO(multiplier[percentchoice] * CashOnHand)
+            CashOnHand = CashOnHand - multiplier[percentchoice] * CashOnHand
+        if choice == 2:
+            UnrealizedGains = UnrealizedGains + investIndexFunds(multiplier[percentchoice] * CashOnHand)
+            CashOnHand = CashOnHand - multiplier[percentchoice] * CashOnHand
     onmap = True
+
 def investIndexFunds(amount):
     rate = (1+0.01*random.randint(4,8))
     result = amount*rate
     return result
 
 def investIPO(amount):
-    rate = (1+0.01*random.randint(-20,100))
+    rate = (1+0.01*float(random.randint(-20,100)))
     result = amount*rate
     return result
 
 def investStock(amount):
-    rate = (1+0.01*random.randint(-10,30))
+    rate = (1+0.01*random.float(randint(-10,30)))
     result = amount*rate
     return result
 
@@ -294,7 +323,16 @@ def investStock(amount):
 #        random_number = random.random()
 #        if random.random() > random_number * 1.07:
 #            choicemenu("Congrats, your picks won!")
+def draw_end_screen(years):
+    WIN.fill(BACKGROUND_COLOR)
+    
+    # Display the congratulation message and the number of years
+    font = pygame.font.Font(None, 36)
+    text = font.render(f"Congratulations, you won in {years} years!", True, (0, 0, 0))
+    text_rect = text.get_rect(center=(WIDTH // 2, HEIGHT // 2))
+    WIN.blit(text, text_rect)
 
+    pygame.display.update()
             
 def main():
     pygame.init()  # Initialize Pygame
@@ -302,11 +340,18 @@ def main():
     clock = pygame.time.Clock()
     run = True
     in_home_screen = True
+    end_screen = False
     Coordinates = pygame.Rect(300,300,CHAR_WIDTH,CHAR_HEIGHT)
     global onmap
     onmap = True
+    global UnrealizedGains  # Declare UnrealizedGains as a global variable
+    onmap = True
+    UnrealizedGains = 0  # Initialize UnrealizedGains here
     
     while run:
+        if CashOnHand > Target:
+            end_screen = True
+            run = False
         clock.tick(FPS)
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -325,6 +370,8 @@ def main():
                 elif EXIT_BUTTON_RECT.collidepoint(mouse_pos):
                     # Exit button clicked, quit the game
                     pygame.quit()
+        elif end_screen:
+            draw_end_screen(Year)
         else:
             keys = pygame.key.get_pressed()
             # print(Coordinates.x, Coordinates.y)
@@ -338,6 +385,9 @@ def main():
                 Coordinates.y += 3
             if keys[pygame.K_SPACE] and Coordinates.y < 423:
                 spaceBar(Coordinates.x,Coordinates.y)
+            if keys[pygame.K_n]:
+                end_of_year()
+                time.sleep(1)
             draw(Coordinates.x,Coordinates.y)
     pygame.quit()
 
