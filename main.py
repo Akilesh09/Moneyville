@@ -7,20 +7,11 @@ WIDTH, HEIGHT = 640, 512
 WIN = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption("Moneyville")
 
-health = 100
-money = 1000
-StockInvestmentMoney = 0
-BondInvestmentMoney = 0
-CDInvestmentMoney = 0
-social = 50
-dailytime = 0
+CashOnHand = 10000
+UnrealizedGains = 0
+Target = 20000
 
-remaininghours = 0  
-
-# Define stat names
-health_name = "Health"
-money_name = "Money"
-social_name = "Social"
+Year = 0
 
 BACKGROUND_COLOR = (255, 255, 255)
 FPS = 60
@@ -44,29 +35,21 @@ onmap = True  # Starts as false
 
 def draw_stats():
     # Stat names and numerical values
-    pygame.draw.rect(WIN, (255, 255, 255), (0, 0, 150, 150))
+    pygame.draw.rect(WIN, (255, 255, 255), (0, 0, 200, 150))
 
     
-    font = pygame.font.Font("font.ttf", 15)
+    font = pygame.font.Font("font.ttf", 12)
     
-    health_text = font.render(f"{health_name}: {health}", True, (0, 0, 0))
-    money_text = font.render(f"{money_name}: {money}", True, (0, 0, 0))
-    social_text = font.render(f"{social_name}: {social}", True, (0, 0, 0))
+    cash_text = font.render(f"{'Cash on Hand'}: {CashOnHand}", True, (0, 0, 0))
+    investment_text = font.render(f"{'Unrealized Gains'}: {UnrealizedGains}", True, (0, 0, 0))
+    target_text = font.render(f"{'Target'}: {Target}", True, (0, 0, 0))
+    year_text = font.render(f"{'Year'}: {Year}", True, (0, 0, 0))
 
 
-    WIN.blit(health_text, (20, 20))
-    WIN.blit(money_text, (20, 60))
-    WIN.blit(social_text, (20, 100))
-
-    # Stat bars
-    pygame.draw.rect(WIN, (255, 0, 0), (20, 50, health, 10))
-    pygame.draw.rect(WIN, (0, 255, 0), (20, 90, money/1000, 10))
-    pygame.draw.rect(WIN, (0, 0, 255), (20, 130, social, 10))
-
-    # Stat bar outlines
-    pygame.draw.rect(WIN, (0, 0, 0), (20, 50, 100, 10), 2)
-    pygame.draw.rect(WIN, (0, 0, 0), (20, 90, 100, 10), 2)
-    pygame.draw.rect(WIN, (0, 0, 0), (20, 130, 100, 10), 2)
+    WIN.blit(cash_text, (20, 20))
+    WIN.blit(investment_text, (20, 50))
+    WIN.blit(target_text, (20, 80))
+    WIN.blit(year_text, (20, 110))
 
     
 def draw(x,y):
@@ -182,45 +165,45 @@ def bank():
 
 #consequences
 
-def thirty_minute_run():
-    if .5 > remaininghours:
-        choicemenu("Sorry, not enough time left", [],)
-    else:
-        reduceTime(30)
-        changeHealth(1)
+#def thirty_minute_run():
+#    if .5 > remaininghours:
+#        choicemenu("Sorry, not enough time left", [],)
+#    else:
+#        reduceTime(30)
+#        changeHealth(1)
 
-def weightlift():
-    if 1 > remaininghours:
-        choicemenu("Sorry, not enough time left", [],)
-    else:
-        reduceTime(.5)
-        changeHealth(1)
+#def weightlift():
+#    if 1 > remaininghours:
+#        choicemenu("Sorry, not enough time left", [],)
+#    else:
+#        reduceTime(.5)
+#        changeHealth(1)
 
-def reduceTime(value): #value in hours
-    remaininghours = remaininghours - value
+#def reduceTime(value): #value in hours
+#    remaininghours = remaininghours - value
 
-def newDay(): #sets time back to normal 
-    time = dailytime
-    changeHealth(-1)
-    social = social -1 
+#def newDay(): #sets time back to normal 
+#    time = dailytime
+#    changeHealth(-1)
+#    social = social -1 
 
-def changeMoney(value):
-    money = money + value
+#def changeMoney(value):
+#    money = money + value
     
-def multInvestment(factor): #mult factor 
-    investmentMoney = investmentMoney * factor
+#def multInvestment(factor): #mult factor 
+#    investmentMoney = investmentMoney * factor
 
-def changeHealth(value): #adds/decreases to fitness
-    health += value
-    if health > 100:
-        health = 99
+#def changeHealth(value): #adds/decreases to fitness
+#    health += value
+#    if health > 100:
+#        health = 99
     
-def gamble(value):
-    if money < 500:
-        choicemenu("Way too less money, sorry!",[],)
-    else:
-        random_number = random.random()
-        if random.random() > random_number * 1.07:
-            choicemenu("Congrats, your picks won!")
+#def gamble(value):
+#    if money < 500:
+#        choicemenu("Way too less money, sorry!",[],)
+#    else:
+#        random_number = random.random()
+#        if random.random() > random_number * 1.07:
+#            choicemenu("Congrats, your picks won!")
 
             
