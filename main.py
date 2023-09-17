@@ -28,7 +28,8 @@ CHARACTER_X, CHARACTER_Y = 0, 0
 counter = 0
 
 loadingscreenset = True  # Starts as false
-onmap = True  # Starts as false
+global onmap
+onmap = False
 
 START_BUTTON_RECT = pygame.Rect(240, 200, 160, 50)
 EXIT_BUTTON_RECT = pygame.Rect(240, 300, 160, 50)
@@ -86,6 +87,24 @@ def draw(x,y):
 def draw_character(x, y):
     WIN.blit(MAIN_CHARACTER, (x, y))
 
+def spaceBar(x,y):
+    # (78,264) (192,390)
+    if 78 < x < 192 and 264 < y < 390:
+        bank()
+    # (186,60) 258,159
+    if 186 < x < 258 and 60 < y < 159:
+        pass
+    # (69,87) (156,150
+    if 69 < x < 156 and 87 < y < 150:
+        pass
+    # 297,45 324,157
+    if 297 < x < 324 and 45 < y < 157:
+        pass
+    # 450,-3 504,66
+    if 450 < x < 504 and -3 < y < 66:
+        pass
+    pass
+
 
 def draw_background():  # draws the background, if we're on the map it draws the map otherwise it draws the boxes for the selection screen
     if onmap:
@@ -122,54 +141,10 @@ def draw_background():  # draws the background, if we're on the map it draws the
 #         return True
 
 
-def main():
-    pygame.init()  # Initialize Pygame
-    pygame.font.init()  # Initialize the font module
-    clock = pygame.time.Clock()
-    run = True
-    in_home_screen = True
-    Coordinates = pygame.Rect(300,300,CHAR_WIDTH,CHAR_HEIGHT)
-    while run:
-        clock.tick(FPS)
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                run = False
-        
-        if in_home_screen:
-            # Draw the home screen
-            draw_home_screen()
-
-            # Check for button clicks
-            mouse_pos = pygame.mouse.get_pos()
-            if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
-                if START_BUTTON_RECT.collidepoint(mouse_pos):
-                    # Start button clicked, transition to the game
-                    in_home_screen = False
-                    # Add your game initialization code here
-                elif EXIT_BUTTON_RECT.collidepoint(mouse_pos):
-                    # Exit button clicked, quit the game
-                    pygame.quit()
-        else:
-            keys = pygame.key.get_pressed()
-            # print(Coordinates.x, Coordinates.y)
-            if keys[pygame.K_LEFT] and Coordinates.x>-49:
-                Coordinates.x -= 3
-            if keys[pygame.K_RIGHT] and Coordinates.x < 538:
-                Coordinates.x += 3
-            if keys[pygame.K_UP] and Coordinates.y > -3:
-                Coordinates.y -= 3
-            if keys[pygame.K_DOWN] and Coordinates.y < 423:
-                Coordinates.y += 3
-            draw(Coordinates.x,Coordinates.y)
-    pygame.quit()
-
-
-if __name__ == "__main__":
-    main()
 
 def choicemenu(prompt,choices,consequence):
     f = True
-    WIN.blit(BACKGROUND_MAP, (0, 0))
+    WIN.blit(PICK_SOMETHING_SCREEN, (0, 0))
     pygame.display.update()
     #add line that displays the prompt on the screen
     #add line that dispslays the prompt on the 
@@ -178,26 +153,46 @@ def choicemenu(prompt,choices,consequence):
         if keys[pygame.K_SPACE]:
             return
         return 0
+    mouse_x ,mouse_y = -5,-5
     while(f):
-        keys = pygame.key.get_pressed()
-        if keys[pygame.K_1]:
+      for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            f = False
+        elif event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
+            mouse_x, mouse_y = pygame.mouse.get_pos()
+            # print(mouse_x,mouse_y)
+        if 20 < mouse_x < 320 and 180 < mouse_y <330:
+            f = False
+            consequence[0]
+        if 320 < mouse_x < 620 and 180 < mouse_y <330:
+            f = False
             consequence[1]
-            return
-        if keys[pygame.K_2]:
+        if 20 < mouse_x < 320 and 330 < mouse_y <480 and len(choices) >= 3:
+            f = False
             consequence[2]
-            return
-        if keys[pygame.K_3] and len(choices) > 2:
+        if 320 < mouse_x < 620 and 330 < mouse_y <480 and len(choices) == 4:
+            f = False
             consequence[3]
-            return
-        if keys[pygame.K_4] and len(choices) == 4:
-            consequence[4]
-            return
+        # keys = pygame.key.get_pressed()
+        # print(keys)
+        # if keys[pygame.K_1]:
+        #     consequence[1]
+        #     return
+        # elif keys[pygame.K_2]:
+        #     consequence[2]
+        #     return
+        # elif keys[pygame.K_3] and len(choices) > 2:
+        #     consequence[3]
+        #     return
+        # elif keys[pygame.K_4] and len(choices) == 4:
+        #     consequence[4]
+        #     return
         
-#def gym():
-    choicemenu("Choose a workout", ["30 minute run", "Weightlifting (1 hour)", "Return Back"], )
-def bank():
-    choicemenu("What type of fund would you like to invest in?", ["Stocks - Medium risk with average ROI of 10% (1 hour)", "Bonds - Low risk with average ROI of 4%(1 hour)", "Certified Deposit(CD) - Very low risk with average ROI of 2%(1 hour)","EXIT"])
 
+def bank():
+    onmap = False
+    choicemenu("What type of fund would you like to invest in?", ["Stocks - Medium risk with average ROI of 10% (1 hour)", "Bonds - Low risk with average ROI of 4%(1 hour)", "Certified Deposit(CD) - Very low risk with average ROI of 2%(1 hour)","EXIT"],[None,None , None, None])
+    onmap = True
 def investIndexFunds(amount):
     rate = (1+0.01*random.randint(4,8))
     result = amount*rate
@@ -257,3 +252,34 @@ def investStock(amount):
 #            choicemenu("Congrats, your picks won!")
 
             
+def main():
+    pygame.init()  # Initialize Pygame
+    pygame.font.init()  # Initialize the font module
+    clock = pygame.time.Clock()
+    run = True
+    Coordinates = pygame.Rect(300,300,CHAR_WIDTH,CHAR_HEIGHT)
+    global onmap
+    onmap = True
+    while run:
+        clock.tick(FPS)
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                run = False
+        keys = pygame.key.get_pressed()
+        # print(Coordinates.x, Coordinates.y)
+        if keys[pygame.K_LEFT] and Coordinates.x>-49:
+            Coordinates.x -= 3
+        if keys[pygame.K_RIGHT] and Coordinates.x < 538:
+            Coordinates.x += 3
+        if keys[pygame.K_UP] and Coordinates.y > -3:
+            Coordinates.y -= 3
+        if keys[pygame.K_DOWN] and Coordinates.y < 423:
+            Coordinates.y += 3
+        if keys[pygame.K_SPACE] and Coordinates.y < 423:
+            spaceBar(Coordinates.x,Coordinates.y)
+        draw(Coordinates.x,Coordinates.y)
+    pygame.quit()
+
+
+if __name__ == "__main__":
+    main()
