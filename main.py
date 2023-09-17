@@ -14,6 +14,8 @@ Target = 20000
 Year = 0
 
 BACKGROUND_COLOR = (255, 255, 255)
+BACKGROUND_COLOR2 = (255, 253, 140)
+
 FPS = 60
 
 CHAR_HEIGHT = 75
@@ -35,7 +37,7 @@ START_BUTTON_RECT = pygame.Rect(240, 200, 160, 50)
 EXIT_BUTTON_RECT = pygame.Rect(240, 300, 160, 50)
 
 def draw_home_screen():
-    WIN.fill(BACKGROUND_COLOR)
+    WIN.fill(BACKGROUND_COLOR2)
 
     # Draw the "Start" button
     pygame.draw.rect(WIN, (0, 255, 0), START_BUTTON_RECT)
@@ -62,7 +64,7 @@ def draw_stats():
     
     cash_text = font.render(f"{'Cash on Hand'}: {CashOnHand}", True, (0, 0, 0))
     investment_text = font.render(f"{'Unrealized Gains'}: {UnrealizedGains}", True, (0, 0, 0))
-    target_text = font.render(f"{'Target'}: {Target}", True, (0, 0, 0))
+    target_text = font.render(f"{'Target'}: {int(Target*(1.03)**Year)}", True, (0, 0, 0))
     year_text = font.render(f"{'Year'}: {Year}", True, (0, 0, 0))
 
 
@@ -188,7 +190,8 @@ def choicemenu(prompt,choices,consequence):
         #     consequence[4]
         #     return
         
-
+#def gym():
+    choicemenu("Choose a workout", ["30 minute run", "Weightlifting (1 hour)", "Return Back"], )
 def bank():
     onmap = False
     choicemenu("What type of fund would you like to invest in?", ["Stocks - Medium risk with average ROI of 10% (1 hour)", "Bonds - Low risk with average ROI of 4%(1 hour)", "Certified Deposit(CD) - Very low risk with average ROI of 2%(1 hour)","EXIT"],[None,None , None, None])
@@ -257,27 +260,44 @@ def main():
     pygame.font.init()  # Initialize the font module
     clock = pygame.time.Clock()
     run = True
+    in_home_screen = True
     Coordinates = pygame.Rect(300,300,CHAR_WIDTH,CHAR_HEIGHT)
     global onmap
     onmap = True
+    
     while run:
         clock.tick(FPS)
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 run = False
-        keys = pygame.key.get_pressed()
-        # print(Coordinates.x, Coordinates.y)
-        if keys[pygame.K_LEFT] and Coordinates.x>-49:
-            Coordinates.x -= 3
-        if keys[pygame.K_RIGHT] and Coordinates.x < 538:
-            Coordinates.x += 3
-        if keys[pygame.K_UP] and Coordinates.y > -3:
-            Coordinates.y -= 3
-        if keys[pygame.K_DOWN] and Coordinates.y < 423:
-            Coordinates.y += 3
-        if keys[pygame.K_SPACE] and Coordinates.y < 423:
-            spaceBar(Coordinates.x,Coordinates.y)
-        draw(Coordinates.x,Coordinates.y)
+        if in_home_screen:
+            # Draw the home screen
+            draw_home_screen()
+
+            # Check for button clicks
+            mouse_pos = pygame.mouse.get_pos()
+            if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
+                if START_BUTTON_RECT.collidepoint(mouse_pos):
+                    # Start button clicked, transition to the game
+                    in_home_screen = False
+                    # Add your game initialization code here
+                elif EXIT_BUTTON_RECT.collidepoint(mouse_pos):
+                    # Exit button clicked, quit the game
+                    pygame.quit()
+        else:
+            keys = pygame.key.get_pressed()
+            # print(Coordinates.x, Coordinates.y)
+            if keys[pygame.K_LEFT] and Coordinates.x>-49:
+                Coordinates.x -= 3
+            if keys[pygame.K_RIGHT] and Coordinates.x < 538:
+                Coordinates.x += 3
+            if keys[pygame.K_UP] and Coordinates.y > -3:
+                Coordinates.y -= 3
+            if keys[pygame.K_DOWN] and Coordinates.y < 423:
+                Coordinates.y += 3
+            if keys[pygame.K_SPACE] and Coordinates.y < 423:
+                spaceBar(Coordinates.x,Coordinates.y)
+            draw(Coordinates.x,Coordinates.y)
     pygame.quit()
 
 
