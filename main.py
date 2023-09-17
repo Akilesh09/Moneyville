@@ -1,6 +1,8 @@
 import pygame
 import os
 import random
+import textwrap
+
 
 
 WIDTH, HEIGHT = 640, 512
@@ -143,19 +145,55 @@ def draw_background():  # draws the background, if we're on the map it draws the
 #         return True
 
 
+   
 
-def choicemenu(prompt,choices,consequence):
+def choicemenu(prompt, choices, consequence):
     f = True
-    WIN.blit(PICK_SOMETHING_SCREEN, (0, 0))
+    choice_font = pygame.font.Font(None, int(36 * 0.7))  # Reduced font size by a factor of 0.7
+
+    # Display the choices before entering the while loop
+    WIN.fill((0, 0, 0))  # Black background
+    prompt_font = pygame.font.Font(None, int(24 * 0.7))  # Reduced font size by a factor of 0.7
+    prompt_text = prompt_font.render(prompt, True, (255, 255, 255))  # White text
+    prompt_text_rect = prompt_text.get_rect(center=(WIDTH // 2, 50))
+    WIN.blit(prompt_text, prompt_text_rect)
+
+    for i, choice in enumerate(choices):
+        choice_rect = pygame.Rect(20 if i % 2 == 0 else 320,  # Left or right side
+                                   180 if i < 2 else 330,    # Top or bottom row
+                                   300, 150)
+        pygame.draw.rect(WIN, (255, 255, 255), choice_rect, 3)  # White border with 3-pixel width
+
+        # Wrap long paragraphs to fit within the choice box, leaving a 10-pixel margin
+        max_width = 280  # Maximum width for the text inside the box
+        wrapped_text = textwrap.fill(choice, width=30)  # Adjust the width as needed
+        wrapped_lines = wrapped_text.split('\n')
+
+        # Calculate the total height required for the wrapped text
+        total_height = 0
+        for line in wrapped_lines:
+            line_text = choice_font.render(line, True, (255, 255, 255))  # White text
+            total_height += line_text.get_height()
+
+        # Calculate the y-coordinate to center the wrapped text vertically
+        y_offset = (choice_rect.height - total_height) // 2
+
+        # Render and display wrapped text line by line
+        for line in wrapped_lines:
+            text = choice_font.render(line, True, (255, 255, 255))  # White text
+            text_rect = text.get_rect(left=choice_rect.left + 10, top=choice_rect.top + y_offset + 10)
+            WIN.blit(text, text_rect)
+            y_offset += text.get_height()
+
     pygame.display.update()
-    #add line that displays the prompt on the screen
-    #add line that dispslays the prompt on the 
+
     if len(choices) == 0:
         keys = pygame.key.get_pressed()
         if keys[pygame.K_SPACE]:
             return
         return 0
     mouse_x ,mouse_y = -5,-5
+    
     while(f):
       for event in pygame.event.get():
         if event.type == pygame.QUIT:
@@ -191,7 +229,10 @@ def choicemenu(prompt,choices,consequence):
         #     return
         
 #def gym():
-    choicemenu("Choose a workout", ["30 minute run", "Weightlifting (1 hour)", "Return Back"], )
+    # choicemenu("Choose a workout", ["30 minute run", "Weightlifting (1 hour)", "Return Back"],[None,None,None,None] )
+
+
+
 def bank():
     onmap = False
     choicemenu("What type of fund would you like to invest in?", ["Stocks - Medium risk with average ROI of 10% (1 hour)", "Bonds - Low risk with average ROI of 4%(1 hour)", "Certified Deposit(CD) - Very low risk with average ROI of 2%(1 hour)","EXIT"],[None,None , None, None])
